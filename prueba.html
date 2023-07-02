@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Pasajes</title>
+</head>
+
+<body>
+    <h1>Agregar Pasaje al Inventario</h1>
+    <form id="formulario">
+        <label for="codigo">Código:</label>
+        <input type="text" id="codigo" name="codigo" required><br>
+
+        <label for="destino">Destino:</label>
+        <input type="text" id="destino" name="destino" required><br>
+
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" required><br>
+
+        <label for="precio">Precio:</label>
+        <input type="number" step="0.01" id="precio" name="precio" required><br>
+
+        <button type="submit">Agregar Pasaje</button>
+    </form>
+
+    <script>
+        // Capturamos el evento de envío del formulario
+        document.getElementById('formulario').addEventListener('submit', function (event) {
+            event.preventDefault() // Evitamos que se recargue la página
+
+            // Obtenemos los valores del formulario
+            var codigo = document.getElementById('codigo').value
+            var destino = document.getElementById('destino').value
+            var cantidad = document.getElementById('cantidad').value
+            var precio = document.getElementById('precio').value
+
+            // Creamos un objeto con los datos del pasaje
+            var pasaje = {
+                codigo: codigo,
+                destino: destino,
+                cantidad: cantidad,
+                precio: precio
+            }
+            console.log(pasaje)
+            // Realizamos la solicitud POST al servidor
+            url = 'https://josefaperalta.pythonanywhere.com/pasajes'
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(pasaje)
+            })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json() // Parseamos la respuesta JSON
+                    } else {
+                        throw new Error('Error al agregar el pasaje.')
+                    }
+                })
+                .then(function (data) {
+                    alert('Pasaje agregado correctamente.')
+                })
+                .catch(function (error) {
+                    console.log('Error:', error)
+                    alert('Error al agregar el pasaje.')
+                })
+            })
+    </script>
+</body>
+
+</html>
